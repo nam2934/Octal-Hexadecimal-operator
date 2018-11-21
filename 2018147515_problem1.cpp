@@ -50,12 +50,13 @@ int main()
 			cout << "Wrong Input!" << endl;
 			continue;
 		}
-		while(true){
+		while (true)
+		{
 
-		cout << "Select the Calculator(Octal calculator(O) Hexadecimal calculator(H)) : ";
-		cin >> Select_Option;
-		cout << endl;
-		
+			cout << "Select the Calculator(Octal calculator(O) Hexadecimal calculator(H)) : ";
+			cin >> Select_Option;
+			cout << endl;
+
 			switch (Select_Option)
 			{
 			case 'O':
@@ -182,8 +183,8 @@ int main()
 				continue;
 			}
 
-			/* cal1.setNum(num1,length1);
-			cal2.setNum(num2,length2);
+			cal1.setNum(num1,length1,Select_Option);
+			cal2.setNum(num2,length2,Select_Option);
 			
 			cout << endl;
 			cout << "1. num1 + num2 : "<< cal1+cal2 <<endl;
@@ -192,10 +193,9 @@ int main()
 			cout << "4. num1 > num2 : "<< ((cal1 > cal2) ? "true":"false") <<endl;
 			cout << "5. num1 < num2 : "<< ((cal1 < cal2) ? "true":"false")<<endl;
 			cout << "6. num1: " << num1 << " num2: " << num2 <<endl;
-			cout << endl; */
+			cout << endl;
 			break;
 		}
-
 	}
 }
 
@@ -205,5 +205,24 @@ Calculator::Calculator()
 }
 
 void Calculator::setNum(char arr[], int size, char type)
+{
+
+}
+friend const Calculator operator+(const Calculator &ref1, const Calculator &ref2)
+{
+}
+friend const Calculator operator-(const Calculator &ref1, const Calculator &ref2)
+{
+}
+friend const bool operator>(const Calculator &ref1, const Calculator &ref2)
+{
+}
+friend const bool operator<(const Calculator &ref1, const Calculator &ref2)
+{
+}
+friend const bool operator==(const Calculator &ref1, const Calculator &ref2)
+{
+}
+friend ostream &operator<<(ostream &outputStream, const Calculator &ref2)
 {
 }
