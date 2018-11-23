@@ -13,10 +13,12 @@ class Calculator
 	friend const bool operator>(const Calculator &ref1, const Calculator &ref2);
 	friend const bool operator<(const Calculator &ref1, const Calculator &ref2);
 	friend const bool operator==(const Calculator &ref1, const Calculator &ref2);
-	friend ostream &operator<<(ostream &outputStream, const Calculator &ref2);
-
+	friend ostream &operator<<(ostream& outputStream, const Calculator &ref2);
+	void set_option(char select_option);
+	int get_total_value();
   private:
 	long long total_value;
+	char option;
 };
 
 int main()
@@ -76,7 +78,7 @@ int main()
 						else
 						{
 							flag = false;
-							break;
+						
 						}
 					}
 
@@ -105,7 +107,7 @@ int main()
 						else
 						{
 							flag2 = false;
-							break;
+						
 						}
 					}
 
@@ -121,7 +123,7 @@ int main()
 			case 'H':
 				while (true)
 				{
-					bool flag = true;
+					bool flag1 = true;
 
 					cout << "Input num1 : ";
 					cin >> num1;
@@ -135,12 +137,12 @@ int main()
 
 						else
 						{
-							flag = false;
-							break;
+							flag1 = false;
+							
 						}
 					}
 
-					if (flag == true)
+					if (flag1 == true)
 						break;
 					else
 					{
@@ -152,9 +154,9 @@ int main()
 				while (true)
 				{
 					bool flag2 = true;
-					cout << "Input num1 : ";
+					cout << "Input num2 : ";
 					cin >> num2;
-					length1 = strlen(num2);
+					length2 = strlen(num2);
 
 					for (int i = 0; i < length2; i++)
 					{
@@ -164,7 +166,7 @@ int main()
 						else
 						{
 							flag2 = false;
-							break;
+						
 						}
 					}
 
@@ -182,17 +184,25 @@ int main()
 				cout << "Wrong Input!" << endl;
 				continue;
 			}
+			Calculator cal1;
+        	Calculator cal2;
 
 			cal1.setNum(num1,length1,Select_Option);
 			cal2.setNum(num2,length2,Select_Option);
-			
+			cal1.set_option(Select_Option);
+			cal2.set_option(Select_Option);
+
 			cout << endl;
-			cout << "1. num1 + num2 : "<< cal1+cal2 <<endl;
-			cout << "2. num2 – num1 : "<< cal2-cal1 <<endl;
+			Calculator plus = cal1 + cal2;
+			Calculator minus = cal1 - cal2;
+			plus.set_option(Select_Option);
+			minus.set_option(Select_Option);
+			cout << "1. num1 + num2 : "<< plus <<endl;
+			cout << "2. num1 – num2 : "<< minus <<endl;
 			cout << "3. num1 == num2 : "<< ((cal1 == cal2) ? "true":"false") <<endl; 
 			cout << "4. num1 > num2 : "<< ((cal1 > cal2) ? "true":"false") <<endl;
 			cout << "5. num1 < num2 : "<< ((cal1 < cal2) ? "true":"false")<<endl;
-			cout << "6. num1: " << num1 << " num2: " << num2 <<endl;
+			cout << "6. num1: " << cal1.get_total_value() << " num2: " << cal2.get_total_value() << endl;
 			cout << endl;
 			break;
 		}
@@ -202,27 +212,109 @@ int main()
 Calculator::Calculator()
 {
 	total_value = 0;
+	option = 0;
 }
 
 void Calculator::setNum(char arr[], int size, char type)
 {
+	switch(type){
+		case 'O':
+			for(int i=0; i<size; i++){
+				total_value = total_value + ((long long)arr[size-1-i]-48)*(long long)pow(8,i);
+    		}
+			break;
+		case 'H':
+			for(int i=0; i<size; i++){
+        		if((48<=(int)arr[size-1-i])&&((int)arr[size-1-i]<=57))
+            		total_value = total_value + ((long long)arr[size-1-i]-48)*(long long)pow(16,i);
+        		else
+            		total_value = total_value + ((long long)arr[size-1-i]-55)*(long long)pow(16,i);
+    		}
+			break;
+	}
+}
+const Calculator operator+(const Calculator &ref1, const Calculator &ref2)
+{
+	Calculator plus;
+	long long a = ref1.total_value + ref2.total_value;
+	plus.total_value = a;
+	return plus;
+}
+const Calculator operator-(const Calculator &ref1, const Calculator &ref2)
+{
+	Calculator minus;
+	long long a = ref1.total_value - ref2.total_value;
+	minus.total_value = a;
+	return minus;
+}
+const bool operator>(const Calculator &ref1, const Calculator &ref2)
+{
+	if(ref1.total_value > ref2.total_value){
+		return true;
+	}
+	else return false;
 
 }
-friend const Calculator operator+(const Calculator &ref1, const Calculator &ref2)
+const bool operator<(const Calculator &ref1, const Calculator &ref2)
 {
+	if(ref1.total_value < ref2.total_value){
+		return true;
+	}
+	else return false;
 }
-friend const Calculator operator-(const Calculator &ref1, const Calculator &ref2)
+const bool operator==(const Calculator &ref1, const Calculator &ref2)
 {
+	if(ref1.total_value == ref2.total_value){
+		return true;
+	}
+	else return false;
 }
-friend const bool operator>(const Calculator &ref1, const Calculator &ref2)
-{
+ostream &operator<<(ostream& outputStream, const Calculator &ref2)
+{	
+	long long total = ref2.total_value;
+	char arr[100];
+	int i=0;
+	if(ref2.option == 'H'){
+		if(total<0){
+			total = pow(16,6) + total;
+		}
+		if(total==0)
+			outputStream << "0";
+		while(total > 0){
+			if(total%16 < 10){
+				arr[i] = (char)(total%16 + 48);
+				i++;
+			}
+			else{
+				arr[i] = (char)(total%16 + 55);
+				i++;
+			}
+			total = total/16;
+		}
+
+	}
+	else if(ref2.option == 'O'){
+		if(total<0){
+			total = pow(8,6) + total;
+		}
+		if(total==0)
+			outputStream << "0";
+		while(total > 0){
+			arr[i] = (char)(total%8 + 48);
+			total = total/8;
+			i++;
+		}
+	}
+	for(int j=1; j<=i; j++){
+        outputStream << (char)arr[i-j];
+    }
+	return outputStream;
 }
-friend const bool operator<(const Calculator &ref1, const Calculator &ref2)
-{
+
+void Calculator::set_option(char select_option){
+	option = select_option;
 }
-friend const bool operator==(const Calculator &ref1, const Calculator &ref2)
-{
-}
-friend ostream &operator<<(ostream &outputStream, const Calculator &ref2)
-{
+
+int Calculator::get_total_value(){
+	return total_value ;
 }
