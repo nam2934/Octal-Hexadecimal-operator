@@ -197,12 +197,16 @@ int main()
 			Calculator minus = cal1 - cal2;
 			plus.set_option(Select_Option);
 			minus.set_option(Select_Option);
+
+			cal1.set_option('D');
+			cal2.set_option('D');
+
 			cout << "1. num1 + num2 : "<< plus <<endl;
 			cout << "2. num1 – num2 : "<< minus <<endl;
 			cout << "3. num1 == num2 : "<< ((cal1 == cal2) ? "true":"false") <<endl; 
 			cout << "4. num1 > num2 : "<< ((cal1 > cal2) ? "true":"false") <<endl;
 			cout << "5. num1 < num2 : "<< ((cal1 < cal2) ? "true":"false")<<endl;
-			cout << "6. num1: " << cal1.get_total_value() << " num2: " << cal2.get_total_value() << endl;
+			cout << "6. num1: " << cal1 << " num2: " << cal2 << endl;
 			cout << endl;
 			break;
 		}
@@ -305,9 +309,15 @@ ostream &operator<<(ostream& outputStream, const Calculator &ref2)
 			i++;
 		}
 	}
-	for(int j=1; j<=i; j++){
-        outputStream << (char)arr[i-j];
-    }
+
+	else if(ref2.option == 'D'){
+		outputStream << total;
+	}
+	if(ref2.option == 'O' || ref2.option == 'H'){
+		for(int j=1; j<=i; j++){
+        	outputStream << (char)arr[i-j];
+    	}
+	}
 	return outputStream;
 }
 
